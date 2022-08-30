@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+configMapGenerator:
+- name: env-corporate-service-configmap
+  envs:
+  - ./env/app.env
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+resources:
+  - service.yaml
+  - deployment.yaml
+  - secret.yaml
+  - backend.yaml

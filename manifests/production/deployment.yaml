@@ -1,0 +1,58 @@
+---
+apiVersion: apps/v1
+kind: Deployment # Type of Kubernetes resource
+metadata:
+   name: corporate-service # Unique name of the Kubernetes resource
+spec:
+   replicas: 1 # Number of pods to run at any given time
+   selector:
+      matchLabels:
+         app: corporate-service # This deployment applies to any Pods matching the specified label
+   template: # This deployment will create a set of pods using the configurations in this template
+      metadata:
+         labels: # The labels that will be applied to all of the pods in this deployment
+            app: corporate-service
+      spec:
+         containers:
+            - name: corporate-service
+              image: gcr.io/PROJECT_ID/IMAGE:TAG
+              ports:
+                  - containerPort: 3035
+              readinessProbe:
+                  httpGet:
+                     path: /
+                     port: 3035
+                     scheme: HTTP
+                  initialDelaySeconds: 5
+                  periodSeconds: 30
+                  failureThreshold: 5
+                  successThreshold: 1
+                  timeoutSeconds: 20
+              livenessProbe:
+                  httpGet:
+                     path: /
+                     port: 3035
+                     scheme: HTTP
+                  initialDelaySeconds: 15
+                  periodSeconds: 60     
+                  failureThreshold: 5
+                  successThreshold: 1
+                  timeoutSeconds: 20
+              envFrom:
+              - secretRef:
+                  name: env-corporate-service-secret
+              - configMapRef:
+                  name: env-corporate-service-configmap
+              resources:
+                limits:
+                    memory: "256Mi"
+                    cpu:    "125m"
+                requests:
+                    memory: "128Mi"
+                    cpu:    "50m"
+         imagePullSecrets:
+            - name: gcr-docker-json-secret
+         volumes: # required for GKE
+          - name: mindtera-k8s-secret-volume
+            secret:
+              secretName: mindtera-k8s-secret

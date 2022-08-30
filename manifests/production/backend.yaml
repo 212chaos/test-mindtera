@@ -1,0 +1,12 @@
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: corporate-service-backend-config
+spec:
+  healthCheck:
+    checkIntervalSec: 30
+    port: 3035
+    type: HTTP
+    healthyThreshold: 1
+    unhealthyThreshold: 10
+    requestPath: /

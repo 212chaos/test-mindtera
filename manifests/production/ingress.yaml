@@ -1,0 +1,76 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-gce-prod-mindtera
+  annotations:
+    networking.gke.io/managed-certificates: cn-prod-mindtera
+    kubernetes.io/ingress.class: "gce"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: backend-go-svc
+            port:
+              number: 80
+      - path: /dashboard-auth/v1/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: dashboard-auth-svc
+            port:
+              number: 80
+      - path: /dashboard-program/v1/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: dashboard-program-svc
+            port:
+              number: 80
+      - path: /quiz-assessment/v1/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: quiz-assessment-svc
+            port:
+              number: 80
+      - path: /consumer/v1/quiz-assessment/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: quiz-assessment-svc
+            port:
+              number: 80
+      # redirects to service "/"
+      - path: /consumer/v1/jeda/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: jeda-svc
+            port:
+              number: 80
+      # redirects to service that accepts url "/", jadi aku belum nemu cara ngedirect ke (misal: jeda-svc/internal)
+      - path: /jeda/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: jeda-svc
+            port:
+              number: 80
+      - path: /consumer/v1/extern-program/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: dashboard-program-svc
+            port:
+              number: 80
+      - path: /corporate-service/v1/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: corporate-service-svc
+            port:
+              number: 80

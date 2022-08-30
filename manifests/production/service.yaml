@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: corporate-service-svc
+  annotations:
+    cloud.google.com/backend-config: '{"ports": { "gin-server":"corporate-service-backend-config"}}'
+spec:
+  selector:
+    app: corporate-service
+  type: NodePort
+  ports:
+    - protocol: TCP
+      name: gin-server
+      port: 80
+      targetPort: 3035
+    - protocol: TCP
+      name: grpc-server
+      port: 50051
+      targetPort: 50051
