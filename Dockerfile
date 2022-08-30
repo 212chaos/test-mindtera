@@ -7,7 +7,7 @@ ENV github_key=${github_key}
 RUN apk --no-cache add git;apk --no-cache add ca-certificates
 RUN git config --global url."${github_key}".insteadOf "https://github.com"
 # go env
-RUN go env -w GOPRIVATE=github.com/mindtera
+RUN go env -w GOPRIVATE=github.com/212chaos
 
 RUN mkdir -p /app
 WORKDIR /app
